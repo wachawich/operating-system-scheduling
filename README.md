@@ -2,11 +2,13 @@
 
 <br>
 
+Stack : Nextjs
+
 ```bash
 
-1. git clone https://github.com/wachawich/OS-Scheduling.git
+1. git clone [https://github.com/wachawich/OS-Scheduling.git](https://github.com/wachawich/operating-system-scheduling.git)
 
-2. cd OS-Scheduling
+2. cd operating-system-scheduling
 
 3. npm install postcss autoprefixer
 
