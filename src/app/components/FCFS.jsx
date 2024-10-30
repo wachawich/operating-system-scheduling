@@ -26,8 +26,12 @@ const FCFSScheduler = () => {
         let currentTime = 0;
         let scheduleBlocks = [];
         let totalTurnaroundTime = 0;
+        const processesCopy = [...processes];
 
-        processes.forEach((process, i) => {
+
+        processesCopy.sort((a, b) => a.arrivalTime - b.arrivalTime);
+
+        processesCopy.forEach((process, i) => {
             if (currentTime < process.arrivalTime) {
                 // Add idle block if there's a gap
                 if (currentTime < process.arrivalTime) {
@@ -77,6 +81,8 @@ const FCFSScheduler = () => {
         }
     };
 
+    let schedule = calculateSchedule(processes);
+
     const getRandomProcessId = () => {
         return `P${Math.floor(Math.random() * 100)}`; // Random Process ID (e.g., P1, P42, etc.)
     };
@@ -93,12 +99,12 @@ const FCFSScheduler = () => {
         
         // Add the new process to the list
         setProcesses([...processes, randomProcess]);
+
+        schedule = calculateSchedule(processes);
     };
     const removeProcess = (index) => {
         setProcesses(processes.filter((_, i) => i !== index));
     };
-
-    const schedule = calculateSchedule(processes);
 
     const colorPalette = {
         P1: 'bg-red-500',        // Color for P1
@@ -164,27 +170,28 @@ const FCFSScheduler = () => {
                     <table className="w-full">
                         <thead>
                             <tr>
-                                <th className="text-left p-2">Process</th>
-                                <th className="text-left p-2">Burst Time</th>
-                                <th className="text-left p-2">Arrival Time</th>
-                                <th className="text-left p-2">Waiting Time</th>
-                                <th className="text-left p-2">Turnaround Time</th>
-                                <th className="text-left p-2">Actions</th>
+                                <th className="text-left p-2 text-sm">Process</th>
+                                <th className="text-left p-2 text-sm">Burst Time</th>
+                                <th className="text-left p-2 text-sm">Arrival Time</th>
+                                <th className="text-left p-2 text-sm">Waiting Time</th>
+                                <th className="text-left p-2 text-sm">Turnaround Time</th>
+                                <th className="text-left p-2 text-sm">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {processes.map((process, index) => (
-                                <tr key={process.id}>
-                                    <td className="p-2">{process.id}</td>
-                                    <td className="p-2">{process.burstTime}</td>
-                                    <td className="p-2">{process.arrivalTime}</td>
-                                    <td className="p-2">{schedule.waitingTime[index]}</td>
-                                    <td className="p-2">{schedule.turnaroundTime[index]}</td>
-                                    <td className="p-2 w-2">
+                                <tr className='h-8' key={process.id}>
+                                    <td className="p-2 text-xs">{process.id}</td>
+                                    <td className="p-2 text-xs">{process.burstTime}</td>
+                                    <td className="p-2 text-xs">{process.arrivalTime}</td>
+                                    <td className="p-2 text-xs">{schedule.waitingTime[index]}</td>
+                                    <td className="p-2 text-xs">{schedule.turnaroundTime[index]}</td>
+                                    <td className="p-2 text-xs w-full flex justify-center border-0">
                                         <Button
                                             variant="destructive"
                                             size="sm"
                                             onClick={() => removeProcess(index)}
+                                            style={{ fontSize: '8px' }}
                                         >
                                             Remove
                                         </Button>
@@ -204,7 +211,7 @@ const FCFSScheduler = () => {
                 {/* Gantt chart */}
                 <div className="mb-4 border-0">
                     <h3 className="text-lg font-semibold mb-2 border-0">Gantt Chart</h3>
-                    <div className="relative h-16 border rounded border-0">
+                    <div className="relative h-12 border rounded border-0">
                         {schedule.scheduleBlocks.map((block, index) => {
                             const widthPercentage = ((block.end - block.start) / schedule.totalTime) * 100;
                             const leftPercentage = (block.start / schedule.totalTime) * 100;

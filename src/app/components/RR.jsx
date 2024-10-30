@@ -13,7 +13,7 @@ const RRScheduler = () => {
     const [lastProcessId, setLastProcessId] = useState(2);
 
     const [quantum, setQuantum] = useState(5);
-    const [schedule, setSchedule] = useState({});
+    let [schedule, setSchedule] = useState({});
 
     const [newProcess, setNewProcess] = useState({
         id: "",
@@ -35,6 +35,10 @@ const RRScheduler = () => {
         const scheduleBlocks = [];
         let currentTime = 0;
     
+        queue.sort((a, b) => a.arrivalTime - b.arrivalTime);
+
+        console.log(queue)
+        
         while (queue.length > 0) {
             let allDone = true; // Flag to check if all processes are done in this round
             for (let i = 0; i < queue.length; i++) {
@@ -105,6 +109,7 @@ const RRScheduler = () => {
         
         // Add the new process to the list
         setProcesses([...processes, randomProcess]);
+
     };
 
     const removeProcess = (index) => {
@@ -184,23 +189,23 @@ const RRScheduler = () => {
                     <table className="w-full">
                         <thead>
                             <tr>
-                                <th className="text-left p-2">Process</th>
-                                <th className="text-left p-2">Burst Time</th>
-                                <th className="text-left p-2">Arrival Time</th>
-                                <th className="text-left p-2">Waiting Time</th>
-                                <th className="text-left p-2">Turnaround Time</th>
-                                <th className="text-left p-2">Actions</th>
+                                <th className="text-left p-2 text-sm">Process</th>
+                                <th className="text-left p-2 text-sm">Burst Time</th>
+                                <th className="text-left p-2 text-sm">Arrival Time</th>
+                                <th className="text-left p-2 text-sm">Waiting Time</th>
+                                <th className="text-left p-2 text-sm">Turnaround Time</th>
+                                <th className="text-left p-2 text-sm">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {processes.map((process, index) => (
                                 <tr key={process.id}>
-                                    <td className="p-2">{process.id}</td>
-                                    <td className="p-2">{process.burstTime}</td>
-                                    <td className="p-2">{process.arrivalTime}</td>
-                                    <td className="p-2">{schedule.waitingTime?.[index]}</td>
-                                    <td className="p-2">{schedule.turnaroundTime?.[index]}</td>
-                                    <td className="p-2 w-2">
+                                    <td className="p-2 text-xs">{process.id}</td>
+                                    <td className="p-2 text-xs">{process.burstTime}</td>
+                                    <td className="p-2 text-xs">{process.arrivalTime}</td>
+                                    <td className="p-2 text-xs">{schedule.waitingTime?.[index]}</td>
+                                    <td className="p-2 text-xs">{schedule.turnaroundTime?.[index]}</td>
+                                    <td className="p-2 text-xs w-2">
                                         <Button
                                             variant="destructive"
                                             size="sm"

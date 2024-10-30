@@ -70,6 +70,21 @@ const SRTFScheduler = () => {
             });
         }
     
+        // Combine schedule blocks with the same id
+        const combinedScheduleBlocks = [];
+        
+        scheduleBlocks.forEach(block => {
+            const lastBlock = combinedScheduleBlocks[combinedScheduleBlocks.length - 1];
+            
+            if (lastBlock && lastBlock.id === block.id) {
+                // If the last block has the same id, combine them
+                lastBlock.end = block.end; // Update the end time
+            } else {
+                // Otherwise, add the new block
+                combinedScheduleBlocks.push({ ...block });
+            }
+        });
+    
         const avgWaitingTime = waitingTime.reduce((a, b) => a + b, 0) / n;
         const avgTurnaroundTime = turnaroundTime.reduce((a, b) => a + b, 0) / n;
     
@@ -78,7 +93,7 @@ const SRTFScheduler = () => {
             turnaroundTime,
             avgWaitingTime,
             avgTurnaroundTime,
-            scheduleBlocks,
+            scheduleBlocks: combinedScheduleBlocks, // Use the combined blocks here
             totalTime: currentTime
         };
     };
@@ -171,23 +186,23 @@ const SRTFScheduler = () => {
                     <table className="w-full">
                         <thead>
                             <tr>
-                                <th className="text-left p-2">Process</th>
-                                <th className="text-left p-2">Burst Time</th>
-                                <th className="text-left p-2">Arrival Time</th>
-                                <th className="text-left p-2">Waiting Time</th>
-                                <th className="text-left p-2">Turnaround Time</th>
-                                <th className="text-left p-2">Actions</th>
+                                <th className="text-left p-2 text-sm">Process</th>
+                                <th className="text-left p-2 text-sm">Burst Time</th>
+                                <th className="text-left p-2 text-sm">Arrival Time</th>
+                                <th className="text-left p-2 text-sm">Waiting Time</th>
+                                <th className="text-left p-2 text-sm">Turnaround Time</th>
+                                <th className="text-left p-2 text-sm">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {processes.map((process, index) => (
                                 <tr key={process.id}>
-                                    <td className="p-2">{process.id}</td>
-                                    <td className="p-2">{process.burstTime}</td>
-                                    <td className="p-2">{process.arrivalTime}</td>
-                                    <td className="p-2">{schedule.waitingTime?.[index]}</td>
-                                    <td className="p-2">{schedule.turnaroundTime?.[index]}</td>
-                                    <td className="p-2 w-2">
+                                    <td className="p-2 text-xs">{process.id}</td>
+                                    <td className="p-2 text-xs">{process.burstTime}</td>
+                                    <td className="p-2 text-xs">{process.arrivalTime}</td>
+                                    <td className="p-2 text-xs">{schedule.waitingTime?.[index]}</td>
+                                    <td className="p-2 text-xs">{schedule.turnaroundTime?.[index]}</td>
+                                    <td className="p-2 text-xs w-2">
                                         <Button
                                             variant="destructive"
                                             size="sm"

@@ -25,34 +25,48 @@ const SJFScheduler = () => {
     }, [processes]);
 
     const calculateSchedule = (processes) => {
-        const sortedProcesses = [...processes].sort((a, b) => a.burstTime - b.burstTime);
+        // const sortedProcesses = [...processes].sort((a, b) => a.burstTime - b.burstTime);
+
+        // เรียง processes ตาม arrivalTime ก่อน
+        const sortedByArrival = [...processes].sort((a, b) => a.arrivalTime - b.arrivalTime);
+
+        // นำ process ที่มี arrivalTime น้อยที่สุดตัวแรกไปเก็บไว้ในตัวแปร
+        const firstProcess = sortedByArrival.shift(); // ลบ process แรกออกจาก array แล้วเก็บไว้ใน firstProcess
+
+        // เรียง processes ที่เหลือตาม burstTime
+        const sortedByBurstTime = sortedByArrival.sort((a, b) => a.burstTime - b.burstTime);
+
+        // รวม firstProcess กับ sortedByBurstTime กลับมาเป็นลำดับใหม่
+        const sortedProcesses = [firstProcess, ...sortedByBurstTime];
+
         const n = sortedProcesses.length;
         const waitingTime = new Array(n).fill(0);
         const turnaroundTime = new Array(n).fill(0);
         const completionTime = new Array(n).fill(0);
         const scheduleBlocks = [];
         let currentTime = 0;
-    
+
+
         for (let i = 0; i < n; i++) {
             const process = sortedProcesses[i];
             const startTime = Math.max(currentTime, process.arrivalTime);
             const endTime = startTime + process.burstTime;
-    
+
             scheduleBlocks.push({
                 id: process.id,
                 start: startTime,
                 end: endTime
             });
-    
+
             completionTime[i] = endTime;
             turnaroundTime[i] = completionTime[i] - process.arrivalTime;
             waitingTime[i] = turnaroundTime[i] - process.burstTime;
             currentTime = endTime;
         }
-    
+
         const avgWaitingTime = waitingTime.reduce((a, b) => a + b, 0) / n;
         const avgTurnaroundTime = turnaroundTime.reduce((a, b) => a + b, 0) / n;
-    
+
         return {
             waitingTime,
             turnaroundTime,
@@ -77,13 +91,13 @@ const SJFScheduler = () => {
     const addRandomProcess = () => {
         const randomProcess = {
             id: `P${lastProcessId}`, // Use the last used ID
-            burstTime: Math.floor(Math.random() * 20) + 1, // Random Burst Time
+            burstTime: Math.floor(Math.random() * 11) + 1, // Random Burst Time
             arrivalTime: Math.floor(Math.random() * 10) // Random Arrival Time
         };
 
         // Increment the lastProcessId for the next process
         setLastProcessId(lastProcessId + 1);
-        
+
         // Add the new process to the list
         setProcesses([...processes, randomProcess]);
     };
@@ -154,23 +168,23 @@ const SJFScheduler = () => {
                     <table className="w-full">
                         <thead>
                             <tr>
-                                <th className="text-left p-2">Process</th>
-                                <th className="text-left p-2">Burst Time</th>
-                                <th className="text-left p-2">Arrival Time</th>
-                                <th className="text-left p-2">Waiting Time</th>
-                                <th className="text-left p-2">Turnaround Time</th>
-                                <th className="text-left p-2">Actions</th>
+                                <th className="text-left p-2 text-sm">Process</th>
+                                <th className="text-left p-2 text-sm">Burst Time</th>
+                                <th className="text-left p-2 text-sm">Arrival Time</th>
+                                <th className="text-left p-2 text-sm">Waiting Time</th>
+                                <th className="text-left p-2 text-sm">Turnaround Time</th>
+                                <th className="text-left p-2 text-sm">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {processes.map((process, index) => (
                                 <tr key={process.id}>
-                                    <td className="p-2">{process.id}</td>
-                                    <td className="p-2">{process.burstTime}</td>
-                                    <td className="p-2">{process.arrivalTime}</td>
-                                    <td className="p-2">{schedule.waitingTime?.[index]}</td>
-                                    <td className="p-2">{schedule.turnaroundTime?.[index]}</td>
-                                    <td className="p-2 w-2">
+                                    <td className="p-2 text-xs">{process.id}</td>
+                                    <td className="p-2 text-xs">{process.burstTime}</td>
+                                    <td className="p-2 text-xs">{process.arrivalTime}</td>
+                                    <td className="p-2 text-xs">{schedule.waitingTime?.[index]}</td>
+                                    <td className="p-2 text-xs">{schedule.turnaroundTime?.[index]}</td>
+                                    <td className="p-2 text-xs w-2">
                                         <Button
                                             variant="destructive"
                                             size="sm"

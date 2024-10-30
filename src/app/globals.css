@@ -19,7 +19,10 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
   border: 0;
-  height: 50vmax
+  height: 100vmin;
+  display: flex;
+  justify-content: center;
+  border: 0;
 }
 
 @tailwind base;
