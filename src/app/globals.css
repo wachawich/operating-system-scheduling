@@ -19,10 +19,15 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
   border: 0;
-  height: 100vmin;
+  /* height: 100vmax; */
+  padding-bottom: 2rem;
   display: flex;
   justify-content: center;
+  align-items: top;
+  position: relative;
   border: 0;
+  overflow-y: scroll;
+  border-bottom: 0;
 }
 
 @tailwind base;

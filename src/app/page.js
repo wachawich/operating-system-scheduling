@@ -9,10 +9,12 @@ import SRTFScheduler from './components/SRTF'; // Example for Shortest Job First
 import PriorityScheduler from './components/Priority'; // Example for Shortest Job First
 import HRRNScheduler from './components/HRRN'; // Example for Shortest Job First
 import MLQFScheduler from './components/MLQF'; // Example for Shortest Job First
+import ALLScheduler from "./components/ALL";
 
 import { Card, CardHeader, CardTitle, CardContent } from './components/ui/card';
 
 const algorithms = [
+  { name: 'ALL', component: ALLScheduler },
   { name: 'FCFS', component: FCFSScheduler },
   { name: 'Round Robin', component: RRScheduler },
   { name: 'SJF - Shortest Job First', component: SJFScheduler },
@@ -33,7 +35,7 @@ export default function Home() {
   const SelectedScheduler = selectedAlgorithm.component;
 
   return (
-    <main className="flex w-full max-h-screen flex-col items-center justify-between p-24 border-0">
+    <main className="flex w-full flex-col items-center justify-between p-24 border-0 relative">
       <select
           onChange={handleAlgorithmChange}
           value={selectedAlgorithm.name}

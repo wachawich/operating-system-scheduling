@@ -18,7 +18,7 @@ Stack : Nextjs
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 
-Algolithm อยู่ใน src/app/components
+Algorithm อยู่ใน src/app/components
 
 <br>
 <br>
