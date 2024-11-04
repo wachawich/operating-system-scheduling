@@ -21,16 +21,27 @@ const calculateSJFSchedule = (processes) => {
 
 
     for (let i = 0; i < n; i++) {
+        // ตรวจสอบว่าเป็น process สุดท้ายหรือไม่เพื่อป้องกัน index out of range
+        if (i < n - 1) {
+            const nextProcess = sortedProcesses[i + 1];
+            
+            // เช็คว่าถ้า nextProcess มี arrivalTime น้อยกว่า process ปัจจุบัน
+            if (currentTime < sortedProcesses[i].arrivalTime) {
+                // สลับ process
+                [sortedProcesses[i], sortedProcesses[i + 1]] = [sortedProcesses[i + 1], sortedProcesses[i]];
+            }
+        }
+    
         const process = sortedProcesses[i];
         const startTime = Math.max(currentTime, process.arrivalTime);
         const endTime = startTime + process.burstTime;
-
+    
         scheduleBlocks.push({
             id: process.id,
             start: startTime,
             end: endTime
         });
-
+    
         completionTime[i] = endTime;
         turnaroundTime[i] = completionTime[i] - process.arrivalTime;
         waitingTime[i] = turnaroundTime[i] - process.burstTime;

@@ -157,7 +157,7 @@ const ALLScheduler = () => {
         P7: 'bg-teal-500',       // Color for P7
         P8: 'bg-orange-500',     // Color for P8
         P9: 'bg-indigo-500',     // Color for P9
-        P10: 'bg-gray-500',      // Color for P10
+        P10: 'bg-blue-100',      // Color for P10
         P11: 'bg-red-600',       // Color for P11 (darker red)
         P12: 'bg-green-600',     // Color for P12 (darker green)
         P13: 'bg-blue-600',      // Color for P13 (darker blue)

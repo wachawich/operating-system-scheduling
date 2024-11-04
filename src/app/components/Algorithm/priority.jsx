@@ -3,11 +3,21 @@ const calculatePrioritySchedule = (processes) => {
     const waitingTime = new Array(n).fill(0);
     const turnaroundTime = new Array(n).fill(0);
     const completionTime = new Array(n).fill(0);
-    const processQueue = [...processes].sort((a, b) => a.priority - b.priority || a.arrivalTime - b.arrivalTime);
+    const processQueue = [...processes].sort((a, b) => a.arrivalTime - b.arrivalTime || a.priority - b.priority);
     const scheduleBlocks = [];
     let currentTime = 0;
 
     for (let i = 0; i < processQueue.length; i++) {
+        if (i < n - 1) {
+            const nextProcess = processQueue[i + 1];
+            
+            // เช็คว่าถ้า nextProcess มี arrivalTime น้อยกว่า process ปัจจุบัน
+            if (currentTime < processQueue[i].arrivalTime) {
+                // สลับ process
+                [processQueue[i], processQueue[i + 1]] = [processQueue[i + 1], processQueue[i]];
+            }
+        }
+
         const process = processQueue[i];
         const startTime = Math.max(currentTime, process.arrivalTime);
         const endTime = startTime + process.burstTime;
